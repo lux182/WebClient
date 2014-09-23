@@ -1,0 +1,864 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Saiway Web Client - Desktops</title>
+    <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="demo/demo.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    <script type="text/vbscript" src="js/rdpvbs.vbs"></script>
+    <link href="images/logo.ico" rel="shortcut icon" />
+    </head>
+    <body class="easyui-layout">
+    <div region="north" border="false" class="rtitle">
+		Saiway Web Client
+		<div class="pull-right">
+		    <table>
+		        <tr><td><label id="loginUser" style="margin-right:20px">当前登录用户：</label></td>
+		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="loginOut()">安全退出</a></td>
+		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" onclick="setFunc()">设置</a></td>
+		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-help'" onclick="getHelp()">帮助</a></td>
+		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="getAbout()">关于</a></td></tr>
+		    </table>
+        </div>
+	</div>
+	
+	<div region="center" border="false"  >
+		 <div class="easyui-layout" fit="true">
+		     <div data-options="region:'center'" style="padding-left:20%;padding-right:20% ;padding-top:30px;padding-bottom:30px">
+		        
+                   <table id="tt" class="easyui-datagrid" title="桌面"  
+                    data-options="singleSelect:true,autoRowHeight:true,fitColumns:true,fit:true,toolbar:'#tb'">
+                   </table>
+              </div>
+          </div>
+	</div>
+    <div region="south" border="false"  >
+     <div style="margin:0 auto;text-align:center;">Copyright © 2014 上海赛为信息技术有限公司版权所有 沪ICP备14013704号</div>
+    </div>  
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton pull-right" iconCls="icon-reload" plain="true" onclick="javascript:$('#tt').datagrid('reload')">刷新</a>
+    </div>
+    
+    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+        closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">桌面名称</div>
+        <form id="fm" method="post" ajax="true" novalidate="true">
+            <div class="fitem">
+                <label>旧桌面名称:</label>
+                <input name="name" class="easyui-textbox" readonly="true">
+            </div>
+            <div class="fitem">
+                <label>新桌面名称:</label>
+                <input name="lastname" class="easyui-textbox" required="true" >
+            </div>
+        </form>
+    </div>
+    
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUsername()" style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+    </div>
+
+    <div id="dlg_set" class="easyui-dialog" style="width:400px;height:300px;padding:10px 20px"
+               closed="true" buttons="#dlg-setbtn">
+     <div id="tabs" class="easyui-tabs">
+     <div title="桌面设置" style="width:400px;height:280px;padding:10px 20px">
+     <div class="ftitle">
+     <label>连接参数设置:</label>
+     </div>
+
+     <form id="setfm" method="post" ajax="true" novalidate>
+         <div class="fitem">
+         <label>全屏</label>
+         <input id="fscreen" type="checkbox" name="fullScreen"></input>
+         </div>
+
+         <div class="fitem">
+         <label>分辨率</label>
+                 <select class="easyui-combobox" id="res" name="resolution" editable=false style="width:200px;">
+                 <option value="1024*768">1024*768</option>
+                 <option value="1440*900">1440*900</option>
+                </select>
+         </div>
+
+         <div class="fitem">
+         <label>位数</label>
+                 <select class="easyui-combobox" id="bits" name="colorBits" editable=false style="width:200px;">
+                 <option value="16">16</option>
+                 <option value="32">32</option>
+                 </select>
+         </div>
+     </form>
+     </div>
+     <div title="用户设置" style="width:400px;height:300px;padding:10px 20px">
+     <div class="ftitle">
+     <label>修改密码:</label>
+     </div>
+     <form id="userfm" method="post">
+     <div class="fitem">
+     <label>旧密码</label>
+     <input id="oldcode" name="oldcode" class="easyui-textbox" type="password"  required="true" >
+     </div>
+     <div class="fitem">
+     <label>新密码</label>
+     <input id="newcode" name="newcode" class="easyui-textbox" type="password" required="true" >
+     </div>
+     <div class="fitem">
+     <label>密码确认</label>
+     <input id="confirmcode" name="confirmcode" class="easyui-textbox" type="password" required="true">
+     </div>
+     </form>
+     <div>
+     <font id="info" color="#FF0000"> </font>
+     </div>
+     </div>
+     </div>
+     </div>
+
+     <div id="dlg-setbtn">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="setOK()"
+        style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_set').dialog('close')" style="width:90px">取消</a>
+     </div>
+
+     <div id="dlg_loginout" class="easyui-dialog"  style="width:400px;height:200px;padding:10px" closed="true" buttons="#dlg_loginout-buttons">
+        您确认要退出吗？
+    </div>
+    
+    <div id="dlg_loginout-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="loginOutOk()" style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_loginout').dialog('close')" style="width:90px">取消</a>
+    </div>
+    
+    <div id="dlg_help" class="easyui-dialog"  style="width:400px;height:200px;padding:10px" closed="true" >
+        <div id="mm3" class="menu-content" style="background:#f0f0f0;padding:10px;text-align:left">
+            <img src="images/background_001.png" style="width:150px;height:50px">
+            <p style="font-size:14px;color:#444;">赛为技术有限公司</p>
+        </div>
+    </div>
+    
+    <div id="dlg_about" class="easyui-dialog"  style="width:500px;height:300px;padding:10px" closed="true">
+        <div class="modal-body text-center">
+            <h5>赛为云桌面</h5>
+            </br>
+            <p>版本1.0</p>
+            </br>
+            </br>
+            <div style="padding-bottom:3px"
+            <p class="muted"  >&copy赛为信息技术有限公司版权所有</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="dlg_stop" class="easyui-dialog"  style="width:400px;height:200px;padding:10px" closed="true" buttons="#dlg_stop-buttons">
+        <table cellpadding="15">
+            <tr>
+                <td><input id='regular_stop' name='stopradio' type='radio' checked='true' /><label for="regular_stop">正常关闭</label></td>
+                <td><input id='forced_stop' name='stopradio' type='radio' /><label for="forced_stop">强制关闭</label></td>
+            </tr>
+        </table>
+    </div>
+    
+    <div id="dlg_stop-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" id="stopDesktopBtn" style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_stop').dialog('close')" style="width:90px">取消</a>
+    </div>
+        
+    <div id="dlg_progress" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+        closed="true"  >
+        <label>正在进入桌面，请稍候...</label>
+        </br>
+        <div id="p_open" class="easyui-progressbar" text=""  style="width:300px; "></div>
+    </div>
+    
+    <input type="text" name="Server" hidden="true" size="41" id="editServer">
+    <select size="1" name="comboResolution" hidden="true" id=comboRes  >
+        <option selected value="1"><ID id=option1>Full-screen</ID></option>
+        <option value="2"><ID id=option2>640 by 480</ID></option>
+        <option value="3"><ID id=option3>800 by 600</ID></option>
+        <option value="4"><ID id=option4>1024 by 768</ID></option>
+        <option value="5"><ID id=option5>1280 by 1024</ID></option>
+        <option value="6"><ID id=option6>1600 by 1200</ID></option>
+    </select>
+    
+    <div id=connectArea style="display: none">
+        <center>
+            <table>
+                <tr>
+                    <OBJECT language="vbscript" ID="MsRdpClient"
+                    onerror="OnControlLoadError"
+                    
+                    CLASSID="CLSID:7584c670-2274-4efb-b00b-d6aaba6d3850"
+                    CODEBASE="msrdp.cab#version=5,2,3790,0"
+                    WIDTH=<% resWidth = Request.QueryString("rW")
+                        if  resWidth < 200 or resWidth > 1600 then
+                           resWidth = 800
+                        end if
+                        Response.Write resWidth %>
+                    HEIGHT=<% resHeight = Request.QueryString("rH")
+                        if  resHeight < 200 or resHeight > 1200 then
+                           resHeight = 600
+                        end if
+                        Response.Write resHeight %>>
+                    </OBJECT>
+                </tr>
+                <tr>
+                    <br>
+                    <font size="1" color="#000000" id="srvfontname" face="Verdana, Arial, Helvetica">
+                    <div id=connectDisplay style="display:none">
+                    <ID id=loggedinsrv>Connected to </ID><i><span id="srvNameField"></span></i></font><br></div>
+                </tr>
+            </table>
+        </center>
+    </div>
+    
+    <div closed="true"
+    <OBJECT codebase="http://192.168.2.85:80/webclient/spice/SpiceX.CAB#version=1,0,0,1" ID="OSpiceX1" CLASSID="CLSID:ACD6D89C-938D-49B4-8E81-DDBD13F4B48A">
+    </OBJECT>
+    </div>
+    <input id="HostIp1" type="text" hidden="true" size="13"> </input>
+    <input id="HostPort1" type="text" hidden="true" size="3"> </input>
+    <input id="SecurePort" type="text" hidden="true" size="3"></INPUT>
+    <input id="Password1" type="text" hidden="true" size="3"></input>
+    <input id="CipherSuite1" type="text" hidden="true" size="13"></input>
+    
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript" src="js/spice.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+
+   $('#tabs').tabs({
+        onSelect:function(title){
+                var tit = $('.tabs-selected').text();
+                if(tit=='桌面设置')
+                {
+                        var data=$('#tt').datagrid('getData');
+                        if(data.total==0)
+                        {
+
+                                $('#setbtn').linkbutton('disable');
+                        }
+                        else
+                        {
+                                $('#setbtn').linkbutton('enable');
+                        }
+                }
+                else
+                {
+                        $('#setbtn').linkbutton('enable');
+                }
+        }
+  });
+ });
+    /*$.cookie('userId', '001');  
+    $.cookie('tenantId', 'A0HF019283HHGGS9SD');  
+    $.cookie('tokenId', 'JDJH98328JHHSFG7JJHDHGH76');  
+    $.cookie('username','liuxs');*/
+    var user_id = $.cookie('userId');
+    var tenant_id = $.cookie('tenantId');
+    var token_id = $.cookie('tokenId');
+    var user_name = $.cookie('username');
+    var url;
+    var preUrl = 'proxy.php?route='+'broker/rest/v1/'+tenant_id;
+    //var preUrl1 = 'http://192.168.0.150:8080/broker/rest/v1/'+tenant_id;
+    //var preUrl = 'proxy1.php?csurl='+preUrl1;
+    $.ajaxSetup({
+        beforeSend:function(xhr){
+            //xhr.setRequestHeader('Access-Control-Allow-Origin:*');
+            xhr.setRequestHeader('X-Auth-Token',token_id);       
+        },
+        headers:{'Mode':'WEB'}
+    });
+   
+    $('#loginUser').append(user_name);
+    
+    $('#dg').datagrid({
+       
+    });
+    $('#tt').datagrid({
+         columns:[[
+            {field:'id',hidden:true,title:'ID'},
+            {field:'osType',hidden:true,title:'系统类型'},
+            {field:'name',width:100,align:'center',formatter:dataFormatter,title:'桌面'},
+            {field:'running',width:50,align:'center',formatter:statusFormater,title:'桌面'},
+            {field:'customName',width:150,align:'center',title:'信息'},
+            {field:'operate',width:100,align:'center',formatter:opreateFormatter,title:'操作'},
+            {field:'usbRedirect',hidden:true},
+            {field:'fullScreen',hidden:true},
+            {field:'resolution',hidden:true},
+            {field:'colorBits',hidden:true},
+            {field:'cpu',hidden:true},
+            {field:'memery',hidden:true},
+            {field:'usbRedirect',hidden:true}
+        ]],
+        loader:function(param,success,error){
+            $.ajax({
+                url:preUrl+'/users/'+user_id+'/desktops',
+                type:'GET',
+                contentType:'text/json',
+                success:function(data,textStatus,jqXHR){ 
+                    var data = eval(data);
+                    success(data.desktops);
+                },
+                error:function(jqXHR){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: "查询桌面列表错误"
+                    });
+                } 
+            });
+        }
+        
+    });
+  
+  function statusFormater(value,row,index){
+		if (row.running==1){
+			return "运行";
+			
+		}else if(row.running==0){
+		    return "停止";
+		}else {
+			return value;
+		}
+	};
+	 
+
+    /**
+    $('#tt').datagrid({data:gridData()});
+    function gridData(){
+        $.ajax({
+            url:'datagrid_data1.json',
+            type:'get',
+            dataType:"json",
+            success:function(data){
+            alert("1");
+            },
+            error:function(){
+             
+            }
+        });
+        
+    }
+    */
+    
+    function dataFormatter(value, row, index){
+        var cc = [];
+        var img = 'ubuntu.png';
+        if(row.osType=="WIN7"){
+            img = "windows.png";
+        }else if(row.osType=="linux"){
+            img = "ubuntu.png";
+        }
+        cc.push('<img src="images/' + img + '" style="width:50% ;margin-top:5px" class="pic" onclick="startComputer(&quot;'+index+'&quot;)">');
+        cc.push('<p style="margin-bottom:0;margin-top:3px" >');
+        cc.push('<a href="javascript:void(0)" onclick="changeName(&quot;'+index+'&quot;)" title="修改" style="text-decoration:none" >');
+        cc.push(value);
+        cc.push('</p>');
+        cc.push('</a>');
+        return cc.join('');
+    };
+    
+     function opreateFormatter(value, row, index){
+        var cc = [];
+        var img_start = 'play-icon.png';
+        var img_stop = 'stop.png';
+        cc.push('<img src="images/' + img_start + '" style="width:15% ;margin-top:5px" title="启动" class="pic" onclick="startComputer(&quot;'+index+'&quot;)">');
+        cc.push('<img src="images/' + img_stop + '" style="width:15% ;margin-top:5px;margin-left:15px" title="关闭" class="pic" onclick="stopComputer(&quot;'+index+'&quot;)">');
+        return cc.join('');
+    };
+    
+    function getStatus(desktopId){
+        $.ajax({
+            url:preUrl+'/desktops/'+desktopId+'/status',
+            data:{"user":{"user_id":user_id}},
+            type:"GET",
+            success: function(result){
+                var result = eval(result);
+                var status = result.status;
+                return status;
+            },
+            error:function(jqXHR){
+                return 100;
+            }
+        });
+    
+    }
+    
+    function startComputer(index){
+        $('#tt').datagrid('selectRow',index);
+        var row = $('#tt').datagrid('getSelected');
+        if (row){
+            $.ajax({
+                url:preUrl+'/desktops/'+row.id+'/status',
+                data:{"user":{"user_id":user_id}},
+                type:"GET",
+                success: function(result){
+                    var result = eval(result);
+                    var status = result.status;
+                    if(status==2){
+                        //获取rdp连接参数
+                        remoteConnectionRDP(row.id);
+                     
+                    }else{
+                        if(status==0){
+                            $.ajax({
+                                url:preUrl+'/desktops/'+row.id+'/start',
+                                data:{"user":{"user_id":user_id}},
+                                type:"POST",
+                                success: function(result){
+                                    openDesktopForRDP(row.id);
+                                },
+                                error:function(jqXHR){
+                                    $.messager.show({
+                                        title: 'Error',
+                                        msg: jqXHR.status
+                                    });
+                                }
+                            });
+                        }else{
+                            openDesktopForRDP(row.id);
+                        }
+                        
+                    }
+                },
+                error:function(jqXHR){
+                    $.messager.show({
+                            title: 'Error',
+                            msg: jqXHR.status
+                    });
+                }
+            });
+        }
+    };
+    var startTimeout;
+    function startProgress(){
+        var value = $('#p_open').progressbar('getValue');
+        if (value == 100){
+            value=0;
+        }else{
+            value += 10;
+        }
+        $('#p_open').progressbar('setValue', value);
+        startTimeout = setTimeout(arguments.callee, 1000);
+    }
+    function openDesktopForRDP(desktopId){
+        var div_colse = false;
+        $('#dlg_progress').dialog({
+            onClose:function(){div_colse=true;$('#p_open').progressbar('setValue', 0);},
+            modal:true
+        });
+        $('#dlg_progress').dialog('open').dialog('setTitle','温馨提示');
+        startProgress();
+        var i=2;
+        var status;
+        var statusInterval
+        function get_Status(){ 
+          if(!div_colse){
+            if(i!=0){
+                $.ajax({
+                    url:preUrl+'/desktops/'+desktopId+'/status',
+                    data:{"user":{"user_id":user_id}},
+                    type:"GET",
+                    success: function(result){
+                        var result = eval(result);
+                        status = result.status;
+                        if(status==2){
+                            clearInterval(statusInterval);
+                            $('#dlg_progress').dialog('close');
+                            clearTimeout(startTimeout);
+                            //获取rdp连接参数
+                            //启动rdp连接
+                            remoteConnectionRDP(desktopId)
+                        }
+                    },
+                    error:function(jqXHR){
+                        $.messager.show({
+                            title: 'Error',
+                            msg: jqXHR.status
+                        });
+                    }
+                });
+                i--;
+            }
+            if(i==0 && status!=2){
+                clearInterval(statusInterval);
+                $('#dlg_progress').dialog('close');
+                clearTimeout(startTimeout);
+                
+                //弹出登录失败框，询问是否启动安全模式
+                $.messager.defaults = { ok: "是", cancel: "否" };
+                $.messager.confirm('安全模式', '进入桌面失败，是否通过安全模式进入桌面', function(r){
+                        if (r){
+                            //获取spice连接参数
+                            //启动spice连接
+                            remoteConnectionSPICE(desktopId);
+                        }
+                });
+            }
+          }else{
+          clearInterval(statusInterval);
+          clearTimeout(startTimeout);
+          }  
+        }
+        statusInterval = setInterval(get_Status,3000);
+    }
+    
+    function remoteConnectionRDP(desktopId){
+        $.ajax({
+            //url:preUrl+'/desktops/'+desktopId+'/selectrdp',
+            url:'data1.json',
+            type:'GET',
+            data:{"user":{"user_id":user_id}},
+            cache:false,
+            success:function(result){
+                var result = eval(result);
+                var guestIp = result.guestIp;
+                $('#editServer').val(guestIp);
+                BtnConnect();
+                reportConnectionStatus(desktopId,'spice',1)
+            },
+            error:function(jqXHR){
+                $.messager.show({
+                        title: 'Error',
+                        msg: jqXHR.status
+                });
+            }
+        });
+    }
+    
+    function remoteConnectionSPICE(desktopId){
+        $.ajax({
+            //url:preUrl+'/desktops/'+desktopId+'/selectspice',
+            url:'data1.json',
+            type:'GET',
+            data:{"user":{"user_id":user_id}},
+            cache:false,
+            success:function(result){
+                var result = eval(result);
+                var hostIp = result.hostIp;
+                var port = result.port;
+                //HostIp1
+                //HostPort1
+                //SecurePort
+                //Password1
+                //CipherSuite1
+                $('#HostIp1').val(hostIp);
+                $('#HostPort1').val(port);
+                ConnectForWebClient();
+                reportConnectionStatus(desktopId,'spice',1)
+            },
+            error:function(jqXHR){
+                $.messager.show({
+                        title: 'Error',
+                        msg: jqXHR.status
+                });
+            }
+        });
+    }
+    function reportConnectionStatus(desktopId,protocol,status){
+        $.ajax({
+            url:preUrl+'/desktops/'+desktopId+'/reportconnectionstatus',
+            type:'POST',
+            data:{"user":{"user_id":user_id,"protocol":protocol,"status":status}},
+            cache:false,
+            success:function(result){
+                var result = eval(result);
+            },
+            error:function(jqXHR){
+                $.messager.show({
+                        title: 'Error',
+                        msg: jqXHR.status
+                });
+            }
+        });
+    }
+    
+    function stopComputer(index){
+        $('#tt').datagrid('selectRow',index);
+        var row = $('#tt').datagrid('getSelected');
+        if (row){
+            $.ajax({
+                 url:preUrl+'/desktops/'+row.id+'/status',
+                 data:{"user":{"user_id":user_id}},
+                 type:"GET",
+                 success: function(result){
+                    var result = eval(result);
+                    var status = result.status;
+                    if(status==0){
+                        $.messager.show({
+                            title: 'Warning',
+                            msg: "桌面已关闭"
+                        });
+                        $('#tt').datagrid('reload');
+                    }else{
+                        $('#dlg_stop').dialog({
+                            modal:true
+                        });
+                        $('#dlg_stop').dialog('open').dialog('setTitle','关闭选项');
+                        $('#stopDesktopBtn').bind('click', function(){
+                            var url;
+                            var radio_id = $('input[type=radio][name=stopradio]:checked').attr('id');
+                            if(radio_id=='regular_stop'){
+                                url = preUrl+'/desktops/'+row.id+'/stop';
+                            };
+                            if(radio_id=='forced_stop'){
+                                url = preUrl+'/desktops/'+row.id+'/destroy';
+                            };
+                            $.ajax({
+                                url:url,
+                                data:{"user":{"user_id":user_id}},
+                                type:'POST',
+                                success: function(result){
+                                    $('#dlg_stop').dialog('close'); // close the dialog
+                                    $('#tt').datagrid('reload'); // reload the user data
+                                },
+                                error:function(jqXHR){
+                                    $.messager.alert(
+                                        'Error',
+                                        jqXHR.status,
+                                        'error'
+                                    );
+                                }
+                            });
+                        });
+                    }
+                },
+                error:function(jqXHR){
+                    $.messager.show({
+                            title: 'Error',
+                            msg: jqXHR.status
+                    });
+                }
+           });
+       }
+    };
+  
+    function changeName(index){
+        $('#tt').datagrid('selectRow',index);
+        var row = $('#tt').datagrid('getSelected');
+        if (row){
+            $('#dlg').dialog({
+                modal:true
+            });
+            $('#dlg').dialog('open').dialog('setTitle','修改桌面名称');
+            $('#fm').form('load',row);
+            //url = 'update_user.php?id='+row.id;
+            url = preUrl+'/desktops/'+row.id+'/changename'
+        }
+    };
+   /** 
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+           
+            success: function(result){alert(result);
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close'); // close the dialog
+                    $('#tt').datagrid('reload'); // reload the user data
+                }
+            }
+        });
+    };
+    */
+    function setFunc(){
+        $('#dlg_set').dialog('open').dialog('setTitle','配置');
+        $('#oldcode').textbox('setText','');
+        $('#newcode').textbox('setText','');
+        $('#confirmcode').textbox('setText','');
+
+        var data=$('#tt').datagrid('getData');
+        if(data.total==0)
+        {
+                $('#setbtn').linkbutton('disable');
+                return;
+        }
+
+        var row0=$('#tt').datagrid('getRows')[0];
+        if(row0.fullScreen==0)
+                $('#fscreen').attr("checked",false);
+        else
+                $('#fscreen').attr("checked",true);
+        $('#res').combobox('setValue',row0.resolution);
+        $('#bits').combobox('setValue',row0.colorBits);
+        document.getElementById("info").innerHTML='';
+
+        };
+    function setOK(){
+        var title = $('.tabs-selected').text();
+	var row0=$('#tt').datagrid('getRows')[0];
+	var desktop_id=row0.id;
+        if(title=='桌面设置')
+        {
+        var full;
+        if($('#fscreen').is(':checked'))
+                full=1;
+        else
+                full=0;
+        $.ajax({
+            type: "POST",
+            url:preUrl+'/desktops/'+desktop_id+'/setting',
+            data: {userId:user_id,fullScreen:full, resolution:$('#res').combobox('getValue'),colorBits:$('#bits').combobox('getValue')},
+            success: function(data){
+                    alert("配置成功！");
+    //              alert(data.desktops[0].id);
+    //              var json=eval('('+data+')');
+    //              alert(json.fullScreen);
+		$('#tt').datagrid('reload');
+                    $('#dlg_set').dialog('close');
+            }/*,
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status);alert(XMLHttpRequest.readyState);alert(textStatus);
+                    }*/,
+            statusCode:{
+                    512:function(){
+                            alert("用户验证失败！");
+                    },
+                    599:function(){
+                            alert("broker返回内部错误");
+                    }
+            }
+
+            });
+            }
+            else
+            {
+	    if($('#oldcode').textbox('getText')=='')
+	    {
+		    document.getElementById("info").innerHTML="请输入原密码";
+		    return;
+	    }
+        if($('#newcode').textbox('getText')=='')
+        {
+                document.getElementById("info").innerHTML="请输入新密码";
+                return;
+        }
+        if($('#confirmcode').textbox('getText')=='')
+        {
+                document.getElementById("info").innerHTML="请再次输入密码";
+                return;
+        }
+        if($('#newcode').textbox('getText') != $('#confirmcode').textbox('getText'))
+        {
+                document.getElementById("info").innerHTML="两次密码输入不一致";
+                return;
+        }
+        $.ajax({
+            type: "POST",
+            url:preUrl+'/users/'+user_id+'/changepassword',
+            data: {oldPassword:$('#oldcode').textbox('getText'), newPassword:$('#newcode').textbox('getText')},
+            success: function(data){
+                    alert("修改密码成功！");
+                    $('#dlg_set').dialog('close');
+            },
+            statusCode:{
+                    510:function(){
+                            document.getElementById("info").innerHTML="修改密码失败！";
+                    },
+                    511:function(){
+                            document.getElementById("info").innerHTML="修改密码失败！";
+                    },
+                    599:function(){
+                            alert("broker返回内部错误");
+                    }
+            }});
+        }
+
+    };
+
+    
+    function saveUsername(){
+       var isValid = $('#fm').form('validate'); 
+       if(isValid){
+            $.ajax({
+             url: url,
+             data:{"user_id":user_id,"desktop_name":$('#fm').find('input[name="lastname"]').val()},
+             type:"POST",
+             success: function(result){
+                var result = eval(result);
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close'); // close the dialog
+                    $('#tt').datagrid('reload'); // reload the user data
+                }
+            },
+            error:function(jqXHR){
+                $.messager.show({
+                        title: 'Error',
+                        msg: jqXHR.status
+                });
+            }
+           });
+       }
+       
+    };
+    function loginOut(){
+        $('#dlg_loginout').dialog({
+            modal:true
+        });
+        $('#dlg_loginout').dialog('open').dialog('setTitle','确认退出');
+       
+    }   
+    function getHelp(){
+        $('#dlg_help').dialog({
+            modal:true
+        });
+        $('#dlg_help').dialog('open').dialog('setTitle','帮助');
+    }
+    function getAbout(){
+        $('#dlg_about').dialog({
+            modal:true
+        });
+        $('#dlg_about').dialog('open').dialog('setTitle','关于');
+    }
+     
+    function loginOutOk(){
+        $.ajax({
+            url:preUrl+'/users/'+user_id+'/logout',
+            type:'POST',
+            data:{"":""},
+            //contentType:'text/plain',
+            success:function(result){
+                var result = eval(result);
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $.cookie('userId', '', { expires: -1 }); 
+                    $.cookie('tenantId', '', { expires: -1 }); 
+                    $.cookie('tokenId', '', { expires: -1 }); 
+                    $('#dlg_loginout').dialog('close'); // close the dialog
+                    window.location.href='login.html'
+                }
+            },
+            error:function(){
+                $.messager.show({
+                        title: 'Error',
+                        msg: "安全退出失败"
+                });
+            }
+        });
+    }
+    
+    </script>
+    
+    </body>
+    </html>

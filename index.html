@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Saiway Web Client - Login</title>
+<link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="demo/demo.css" />
+<link href="images/logo.ico" rel="shortcut icon" />
+</head>
+<body >
+<table align="center">
+	<tr>
+		<td>
+<div class="easyui-panel" title="Login" style="width:400px">
+    <div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post" ajax="true" novalidate="true">
+        <table cellpadding="5">
+            <tr>
+                <td>UserName:</td>
+                <td><input name="username" type="text" class="easyui-textbox" id="username" maxlength="32" data-options="required:true,prompt:'Enter a username ...',validType:'length[0,32]'"></input></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input name="password"  type="password" class="easyui-textbox" id="password" maxlength="32" data-options="required:true,required:true,prompt:'Enter a password ...',validType:'length[0,32]'"></input></td>
+            </tr>
+            <tr>
+                <td>Tenant:</td>
+                <td><input name="tenant" type="text" class="easyui-textbox" id="tenant" maxlength="32" data-options="required:true,required:true,prompt:'Enter a tenant ...',validType:'length[0,32]'"></input></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><font id="error" color="#FF0000"> </font></td>
+            </tr>
+        </table>
+    </form>
+    <div style="text-align:center;padding:5px">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="loginForm()">Login</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="resetForm()">Reset</a>
+    </div>
+    </div>
+</div>
+</td>
+</tr>
+</table>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/jquery.easyui.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+	    headers:{'Mode':'WEB'}
+	});
+
+    function loginForm(){
+       var isValid = $('#ff').form('validate');
+       var url='proxy.php?route='+'broker/rest/v1/';
+       url+=$("#tenant").val();
+       url+="/users/user/login";
+       //var url="http://192.168.0.113:8080/broker/rest/v1/{tenant_name}/users/user/login";
+       if(isValid){            
+               $.ajax({             
+                url: url,             
+                data:{'userName':$('#username').textbox('getText'),'password':$('#password').textbox('getText')},             
+                type:"POST",             
+                success: function(result){          
+			        $.cookie("userId",result.userId);
+			        $.cookie("tenantId",result.tenantId);
+			        $.cookie("tokenId",result.tokenId);
+			        $.cookie("username",$("#username").val());
+			        window.location.href="desktops.html";
+                },
+ 		statusCode:{
+			510:function(){
+				document.getElementById("error").innerHTML="用户名或密码错误!";
+			},
+			511:function(){
+				document.getElementById("error").innerHTML="用户名或密码错误!";
+			},
+			514:function(){
+				document.getElementById("error").innerHTML="该用户被禁用!";
+			},
+			599:function(){
+				document.getElementById("error").innerHTML="Broker返回内部错误!";
+			}
+			  }
+                });
+       }
+    }
+    function resetForm(){
+        $('#ff').form('clear');
+    }
+</script>
+</body>
+</html>

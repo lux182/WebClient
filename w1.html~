@@ -1,0 +1,491 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Saiway Web Client - Desktops</title>
+    <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="demo/demo.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+   
+    </head>
+    <body class="easyui-layout">
+    <div region="north" border="false" class="rtitle">
+		Saiway Web Client
+		<div class="pull-right">
+		    <table>
+		        <tr><label id="loginUser" style="margin-right:20px">当前登录用户：</label></tr>
+		        <tr><a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="loginOut()">安全退出</a></tr>
+		        <tr><a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" onclick="setFunc()">设置</a></tr>
+		        <tr><a href="#" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-help'">帮助</a></tr>
+		        <tr><a href="#" class="easyui-menubutton" data-options="menu:'#mm3'">关于</a></tr>
+		    </table>
+        </div>
+	</div>
+	
+	<div region="center" border="false"  >
+		 <div class="easyui-layout" fit="true">
+		     <div data-options="region:'center'" style="padding-left:20%;padding-right:20% ;padding-top:30px">
+		        
+                    <table id="tt" class="easyui-datagrid" title="Desktops" style="width:900px; height:500px"
+                    data-options="singleSelect:true,toolbar:'#tb',autoRowHeight:true,fitColumns:true">
+                        <thead>
+                        <tr>
+                            <th data-options="field:'id',width:80,hidden:true">ID</th>
+                            <th data-options="field:'osType',width:80,hidden:true">系统类型</th>
+                            <th data-options="field:'name',width:100,align:'center',formatter:dataFormatter "> 桌面</th>
+                            <th data-options="field:'running',width:80,align:'center',formatter:statusFormater">状态</th>
+                            <th data-options="field:'customName',width:180 ">信息</th>
+                            <th data-options="field:'operate',width:100,align:'center',formatter:opreateFormatter">操作</th>
+                            <th data-options="field:'usbRedirect',hidden:true"></th>
+                            <th data-options="field:'fullScreen',hidden:true"></th>
+                            <th data-options="field:'resolution',hidden:true"></th>
+                            <th data-options="field:'colorBits',hidden:true"></th>
+                            <th data-options="field:'cpu',hidden:true"></th>
+                            <th data-options="field:'memery',hidden:true"></th>
+                            <th data-options="field:'usbRedirect',hidden:true"></th>
+                            <th data-options="field:'usbRedirect',hidden:true"></th>
+                        </tr>
+                        </thead>
+                   </table>
+              </div>
+          </div>
+	</div>
+    <div id="footer" style="padding-bottom:3px" >
+        <div>Copyright © 2010-2014 www.jeasyui.com</div>
+    </div>   
+    
+    
+    <div id="mm1" style="width:150px;">
+        <div data-options="iconCls:'icon-undo'">Undo</div>
+        <div data-options="iconCls:'icon-redo'">Redo</div>
+        <div class="menu-sep"></div>
+        <div>Cut</div>
+        <div>Copy</div>
+        <div>Paste</div>
+        <div class="menu-sep"></div>
+        <div>
+        <span>Toolbar</span>
+        <div>
+        <div>Address</div>
+        <div>Link</div>
+        <div>Navigation Toolbar</div>
+        <div>Bookmark Toolbar</div>
+        <div class="menu-sep"></div>
+        <div>New Toolbar...</div>
+        </div>
+        </div>
+        <div data-options="iconCls:'icon-remove'">Delete</div>
+        <div>Select All</div>
+    </div> 
+    
+    
+    <div id="mm2" style="width:100px;">
+    <div>Help</div>
+    <div>Update</div>
+    <div>About</div>
+    </div>
+    <div id="mm3" class="menu-content" style="background:#f0f0f0;padding:10px;text-align:left">
+    <img src="http://www.jeasyui.com/images/logo1.png" style="width:150px;height:50px">
+    <p style="font-size:14px;color:#444;">Try jQuery EasyUI to build your modern, interactive, javascript applications.</p>
+    </div>
+    
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton pull-right" iconCls="icon-reload" plain="true" onclick="javascript:$('#tt').datagrid('reload')">Refresh</a>
+    </div>
+    
+    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+        closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">桌面名称</div>
+        <form id="fm" method="post" ajax="true" novalidate="true">
+            <div class="fitem">
+                <label>旧桌面名称:</label>
+                <input name="name" class="easyui-textbox" readonly="true">
+            </div>
+            <div class="fitem">
+                <label>新桌面名称:</label>
+                <input name="lastname" class="easyui-textbox" required="true" >
+            </div>
+        </form>
+    </div>
+    
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUsername()" style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+    </div>
+
+    <div id="dlg_set" class="easyui-dialog" style="width:400px;height:300px;padding:10px 20px"
+               closed="true" buttons="#dlg-setbtn">
+     <div id="tabs" class="easyui-tabs">
+     <div title="桌面设置" style="width:400px;height:280px;padding:10px 20px">
+     <div class="ftitle">
+     <label>连接参数设置:</label>
+     </div>
+
+     <form id="setfm" method="post" ajax="true" novalidate>
+         <div class="fitem">
+         <label>全屏</label>
+         <input id="fscreen" type="checkbox" name="fullScreen"></input>
+         </div>
+
+         <div class="fitem">
+         <label>分辨率</label>
+                 <select class="easyui-combobox" id="res" name="resolution" editable=false style="width:200px;">
+                 <option value="1024*768">1024*768</option>
+                 <option value="1440*900">1440*900</option>
+                </select>
+         </div>
+
+         <div class="fitem">
+         <label>位数</label>
+                 <select class="easyui-combobox" id="bits" name="colorBits" editable=false style="width:200px;">
+                 <option value="16">16</option>
+                 <option value="32">32</option>
+                 </select>
+         </div>
+     </form>
+     </div>
+     <div title="用户设置" style="width:400px;height:300px;padding:10px 20px">
+     <div class="ftitle">
+     <label>修改密码:</label>
+     </div>
+     <form id="userfm" method="post">
+     <div class="fitem">
+     <label>旧密码</label>
+     <input id="oldcode" name="oldcode" class="easyui-textbox" type="password"  required="true" >
+     </div>
+     <div class="fitem">
+     <label>新密码</label>
+     <input id="newcode" name="newcode" class="easyui-textbox" type="password" required="true" >
+     </div>
+     <div class="fitem">
+     <label>密码确认</label>
+     <input id="confirmcode" name="confirmcode" class="easyui-textbox" type="password" required="true">
+     </div>
+     </form>
+     <div>
+     <font id="info" color="#FF0000"> </font>
+     </div>
+     </div>
+     </div>
+     </div>
+
+     <div id="dlg-setbtn">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="setOK()"
+        style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_set').dialog('close')" style="width:90px">取消</a>
+     </div>
+
+     <div id="dlg_loginout" class="easyui-dialog"  style="width:400px;height:200px;padding:10px" closed="true" buttons="#dlg_loginout-buttons">
+        您确认要退出吗？
+    </div>
+    
+    <div id="dlg_loginout-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="loginOutOk()" style="width:90px">确认</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_loginout').dialog('close')" style="width:90px">取消</a>
+    </div>
+    
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+    
+    <script type="text/javascript">
+    $.cookie('userId', '001');  
+    $.cookie('tenantId', 'A0HF019283HHGGS9SD');  
+    $.cookie('tokenId', 'JDJH98328JHHSFG7JJHDHGH76');  
+    $.cookie('username','liuxs');
+    var user_id = $.cookie('userId');
+    var tenant_id = $.cookie('tenantId');
+    var token_id = $.cookie('tokenId');
+    var user_name = $.cookie('username');
+    var url;
+    var preUrl = 'http://192.168.0.77:8080/broker/rest/v1/'+tenant_id;
+    $.ajaxSetup({
+        beforeSend:function(xhr){
+            xhr.setRequestHeader('Access-Control-Allow-Origin:*');
+            //xhr.setRequestHeader('X-Auth-Token','aaaaaaaaaaassssssssssss');       
+        },
+        //headers:{'Mode':'WEB'}
+    });
+    $('#loginUser').append(user_name);
+    $('#tt').datagrid({
+        loader:function(param,success,error){
+            $.ajax({
+                url:preUrl+'/users/'+user_id+'/desktops',
+                type:'GET',
+                success:function(data,textStatus,jqXHR){ 
+                    var data = eval(data);
+                    success(data.desktops);
+                },
+                error:function(jqXHR){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: "查询桌面列表错误"
+                    });
+                } 
+            });
+        }
+        
+    });
+    
+  function statusFormater(value,row,index){
+		if (row.running==1){
+			return "运行";
+			
+		}else if(row.running==0){
+		    return "停止";
+		}else {
+			return value;
+		}
+	};
+	 
+
+    /**
+    $('#tt').datagrid({data:gridData()});
+    function gridData(){
+        $.ajax({
+            url:'datagrid_data1.json',
+            type:'get',
+            dataType:"json",
+            success:function(data){
+            alert("1");
+            },
+            error:function(){
+             
+            }
+        });
+        
+    }
+    */
+    
+    function dataFormatter(value, row, index){
+        var cc = [];
+        var img = 'ubuntu.png';
+        if(row.osType=="WIN7"){
+            img = "windows.png";
+        }else if(row.osType=="linux"){
+            img = "ubuntu.png";
+        }
+        cc.push('<img src="images/' + img + '" style="width:50% ;margin-top:5px" class="pic" onclick="startComputer()">');
+        cc.push('<p style="margin-bottom:0;margin-top:3px" >');
+        cc.push('<a href="javascript:void(0)" onclick="changeName(&quot;'+index+'&quot;)" title="修改" style="text-decoration:none" >');
+        cc.push(value);
+        cc.push('</p>');
+        cc.push('</a>');
+        return cc.join('');
+    };
+    
+     function opreateFormatter(value, row, index){
+        var cc = [];
+        var img_start = 'play-icon.png';
+        var img_stop = 'stop.png';
+        cc.push('<img src="images/' + img_start + '" style="width:15% ;margin-top:5px" class="pic" onclick="startComputer()">');
+        cc.push('<img src="images/' + img_stop + '" style="width:15% ;margin-top:5px;margin-left:15px" class="pic" onclick="stopComputer()">');
+        return cc.join('');
+    };
+    
+    function startComputer(){
+        alert("开机");
+    };
+    function stopComputer(){
+        alert("关机");
+    };
+    function changeName(index){
+        $('#tt').datagrid('selectRow',index);
+        var row = $('#tt').datagrid('getSelected');
+        if (row){
+            $('#dlg').dialog('open').dialog('setTitle','修改桌面名称');
+            $('#fm').form('load',row);
+            //url = 'update_user.php?id='+row.id;
+            url = preUrl+'/desktops/'+row.id+'/changename'
+        }
+    };
+   /** 
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+           
+            success: function(result){alert(result);
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close'); // close the dialog
+                    $('#tt').datagrid('reload'); // reload the user data
+                }
+            }
+        });
+    };
+    */
+    function setFunc(){
+
+	var row0=$('#tt').datagrid('getRows')[0];
+//	alert(row0.fullScreen+row0.resolution+row0.colorBits);
+	if(row0.fullScreen==0)
+		$('#fscreen').attr("checked",false);
+	else
+		$('#fscreen').attr("checked",true);
+	$('#res').combobox('setValue',row0.resolution);
+	$('#bits').combobox('setValue',row0.colorBits);
+        $('#dlg_set').dialog('open').dialog('setTitle','配置');
+        $('#oldcode').textbox('setText','');
+        $('#newcode').textbox('setText','');
+        $('#confirmcode').textbox('setText','');
+        document.getElementById("info").innerHTML='';
+    };
+    function setOK(){
+            var title = $('.tabs-selected').text();
+            if(title=='桌面设置')
+            {
+            var full;
+            if($('#fscreen').is(':checked'))
+                    full=1;
+            else
+                    full=0;
+            $.ajax({
+                type: "POST",
+        //      url:"http://192.168.0.115:8080/broker/rest/v1/{tenant_id}/desktops/{desktop_id}/setting",
+                url:"http://192.168.0.77:8080/broker/rest/v1/{tenant_id}/users/{user_id}/desktops",
+                data: {fullScreen:full, resolution:$('#res').combobox('getValue'),colorBits:$('#bits').combobox('getValue')},
+                success: function(data){
+                        alert("配置成功！");
+        //              alert(data.desktops[0].id);
+        //              var json=eval('('+data+')');
+        //              alert(json.fullScreen);
+			$('#tt').datagrid('reload');
+                        $('#dlg_set').dialog('close');
+                }/*,
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);alert(XMLHttpRequest.readyState);alert(textStatus);
+                        }*/,
+                statusCode:{
+                        512:function(){
+                                alert("用户验证失败！");
+                        },
+                        599:function(){
+                                alert("broker返回内部错误");
+                        }
+                }
+
+                });
+            }
+            else
+            {
+	    if($('#oldcode').textbox('getText')=='')
+	    {
+		    document.getElementById("info").innerHTML="请输入原密码";
+		    return;
+	    }
+            if($('#newcode').textbox('getText')=='')
+            {
+                    document.getElementById("info").innerHTML="请输入新密码";
+                    return;
+            }
+            if($('#confirmcode').textbox('getText')=='')
+            {
+                    document.getElementById("info").innerHTML="请再次输入密码";
+                    return;
+            }
+            if($('#newcode').textbox('getText') != $('#confirmcode').textbox('getText'))
+            {
+                    document.getElementById("info").innerHTML="两次密码输入不一致";
+                    return;
+            }
+            $.ajax({
+                type: "POST",
+        //      url:"http://192.168.0.115:8080/broker/rest/v1/{tenant_id}/desktops/{desktop_id}/setting"
+                url:"http://192.168.0.77:8080/broker/rest/v1/{tenant_id}/users/{user_id}/changepassword",
+                data: {oldPassword:$('#oldcode').textbox('getText'), newPassword:$('#newcode').textbox('getText')},
+                success: function(data){
+                        alert("修改密码成功！");
+                        $('#dlg_set').dialog('close');
+                },
+                statusCode:{
+                        510:function(){
+                                document.getElementById("info").innerHTML="修改密码失败！";
+                        },
+                        511:function(){
+                                document.getElementById("info").innerHTML="修改密码失败！";
+                        },
+                        599:function(){
+                                alert("broker返回内部错误");
+                        }
+                }});
+            }
+
+    };
+
+    
+    function saveUsername(){
+       var isValid = $('#fm').form('validate');
+       if(isValid){
+            $.ajax({
+             url: url,
+             data:$('#fm').serialize(),
+             type:"POST",
+             success: function(result){
+                var result = eval(result);
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close'); // close the dialog
+                    $('#tt').datagrid('reload'); // reload the user data
+                }
+            },
+            error:function(jqXHR){
+                $.messager.show({
+                        title: 'Error',
+                        msg: jqXHR.status
+                });
+            }
+           });
+       }
+       
+    };
+    function loginOut(){
+        $('#dlg_loginout').dialog('open').dialog('setTitle','确认退出');
+    }    
+    function loginOutOk(){
+        $.ajax({
+            url:preUrl+'/users/'+user_id+'/logout',
+            //type:'POST',
+            type:"get",
+            
+            //dataType:"json",
+            
+            success:function(result){
+                var result = eval(result);
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $.cookie('userId', '', { expires: -1 }); 
+                    $.cookie('tenantId', '', { expires: -1 }); 
+                    $.cookie('tokenId', '', { expires: -1 }); 
+                    $('#dlg_loginout').dialog('close'); // close the dialog
+                    window.location.href='test.php'
+                }
+            },
+            error:function(){
+                $.messager.show({
+                        title: 'Error',
+                        msg: "安全退出失败"
+                });
+            }
+        });
+    }
+    </script>
+    
+    </body>
+    </html>

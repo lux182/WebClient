@@ -1,0 +1,24 @@
+[
+    {
+        "desktopId": 0,
+        "desktopType":"windows",
+        "name": "test0",
+        "status": "运行",
+        "info":"win7计算机"
+    },
+  {
+        "desktopId": 1,
+        "desktopType":"linux",
+        "name": "test1",
+        "status": "关闭",
+        "info":"linux计算机"     
+  },
+  {
+       "desktopId": 2,
+       "desktopType":"windows",
+       "name": "test2",
+       "status": "运行",
+       "info": "winxp计算机"     
+  }
+  
+]

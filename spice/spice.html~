@@ -1,0 +1,460 @@
+<HTML>
+<HEAD>
+<TITLE>ATL 8.0 test page for object OSpiceX</TITLE>
+
+<script id=clientEventHandlersJS language=javascript>
+<!--
+
+function OnPageLoad() 
+{
+    document.all["HostIp1"].value = OSpiceX1.HostIP;
+    document.all["HostPort1"].value = OSpiceX1.Port;
+    document.all["Password1"].value = OSpiceX1.Password;
+    document.all["CipherSuite1"].value = OSpiceX1.CipherSuite;
+	document.all["NumberOfMonitors1"].value = OSpiceX1.NumberOfMonitors;
+
+    document.all["HostIp2"].value = OSpiceX2.HostIP;
+    document.all["HostPort2"].value = OSpiceX2.Port;
+    document.all["Password2"].value = OSpiceX2.Password;
+    document.all["CipherSuite2"].value = OSpiceX1.CipherSuite;
+	
+	document.all["AudioGuestIp1"].value = OSpiceX1.AudioGuestIP;
+    document.all["AudioGuestPort1"].value = OSpiceX1.AudioGuestPort;
+}
+
+function SP1_Title()
+{
+	OSpiceX1.Title = "Test Title";
+}
+
+function SetAudioGuestIp1()
+{
+    OSpiceX1.AudioGuestIP = document.all["AudioGuestIp1"].value; //set property    
+}
+
+function SetAudioGuestPort1()
+{
+    OSpiceX1.AudioGuestPort = document.all["AudioGuestPort1"].value; //set property    
+}
+
+function SP1_AudioConnect()
+{
+    try
+    {
+    OSpiceX1.ConnectAudio();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function SP1_AudioDisconnect()
+{
+    try
+    {
+    OSpiceX1.DisconnectAudio();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function CreateMenu()
+{
+	//OSpiceX1.CreateMenu( document.all["MenuRes"].value);
+	OSpiceX1.DynamicMenu = document.all["MenuRes"].value;
+}
+
+function DeleteMenu()
+{
+	OSpiceX1.DeleteMenu();
+}
+
+function SetTitle1()
+{    
+    OSpiceX1.Title = document.all["Title1"].value; //set property    
+}
+
+function GetTitle1()
+{    
+    alert(OSpiceX1.Title);
+}
+
+function SetHostIp1()
+{
+    OSpiceX1.HostIP = document.all["HostIp1"].value; //set property    
+}
+
+function SetHostPort1()
+{
+    OSpiceX1.Port = document.all["HostPort1"].value; //set property    
+}
+
+function SetSecurePort1()
+{
+    OSpiceX1.SecurePort = document.all["SecurePort1"].value; //set property    
+}
+
+function SetPassword1()
+{
+    OSpiceX1.Password = document.all["Password1"].value; //set property    
+}
+
+function SetCipherSuite1()
+{
+    OSpiceX1.CipherSuite = document.all["CipherSuite1"].value; //set property
+}
+
+function SetEncryptedChannels1()
+{
+    OSpiceX1.SSLChannels = document.all["EncryptedChannels1"].value; //set property
+}
+
+function SetNumberOfMonitors1()
+{
+    OSpiceX1.NumberOfMonitors = document.all["NumberOfMonitors1"].value; //set property
+}
+
+function SetColorDepth1()
+{
+    OSpiceX1.ColorDepth = document.all["ColorDepth1"].value; //set property
+}
+
+function SetDisableEffects1()
+{
+    OSpiceX1.DisableEffects = document.all["DisableEffects1"].value; //set property
+}
+
+function SP1_Connect()
+{
+    try
+    {    
+    OSpiceX1.FullScreen = document.all["Checkbox1"].checked;
+
+    if (document.getElementById('NoUsb').checked) {
+        OSpiceX1.UsbListenPort = document.getElementById('UsbListenPort').value;
+    } else {
+        OSpiceX1.UsbListenPort = 0;
+    }
+
+    OSpiceX1.Connect();
+    }
+    catch(e)
+    {
+    	alert("OSpiceX1:"+OSpiceX1);
+    alert(translate_errnum(e.number));
+    }
+}
+
+function SP1_Disconnect()
+{
+    try
+    {
+    OSpiceX1.Disconnect();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function SP1_CopyLibcelt()
+{
+    try
+    {
+    	
+    OSpiceX1.CopyLibcelt();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function SP1_Show()
+{
+    try
+    {
+    OSpiceX1.Show();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+
+    // OSpiceX1.Port = 5; // set property
+    // alert(OSpiceX1.Port); //get property
+}
+
+function SP1_Hide()
+{
+    try
+    {
+    OSpiceX1.Hide();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function SetTitle2()
+{
+    OSpiceX2.Title = document.all["Title2"].value; //set property    
+}
+
+function SetHostIp2()
+{
+    OSpiceX2.HostIP = document.all["HostIp2"].value; //set property    
+}
+
+function SetHostPort2()
+{
+    OSpiceX2.Port = document.all["HostPort2"].value; //set property    
+}
+
+function SetPassword2()
+{
+    OSpiceX2.Password = document.all["Password2"].value; //set property    
+}
+
+function SetCipherSuite2()
+{
+    OSpiceX1.CipherSuite = documet.all["CipherSuite2"].value; //set property
+}
+
+function SP2_Connect()
+{
+try
+	{
+		alert("begin to connect by spice...");
+	OSpiceX2.Connect();
+	}
+catch(e)
+	{
+	alert(translate_errnum(e.number));
+	}
+}
+
+function SP2_Disconnect()
+{
+try
+	{
+	OSpiceX2.Disconnect();
+	}
+catch(e)
+	{
+	alert(translate_errnum(e.number));
+	}
+}
+
+function SP2_Show()
+{
+    try
+    {
+    OSpiceX2.Show();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function SP2_Hide()
+{
+    try
+    {
+    OSpiceX2.Hide();
+    }
+    catch(e)
+    {
+    alert(translate_errnum(e.number));
+    }
+}
+
+function OnDisconnected(ErrCode) 
+{
+		alert("OnDisconnected =" + ErrCode);
+}
+
+function OnMenuItemSelected(ItemID) 
+{
+		alert("OnMenuItemSelected =" + ItemID);
+}
+
+function translate_errnum(num)
+{
+	var errnum = (num & 268435455); // get rid of severity
+	var msg = "" + errnum.toString(16).toUpperCase();
+	while (msg.length < 6)
+	{
+		msg = "0" + msg;
+	}
+		return "0x80" + msg;
+}
+
+function Text2_onclick() {
+
+}
+
+//-->
+</script>
+
+<script language="javascript" event="OnDisconnected(ErrCode)" for="OSpiceX1">
+<!--
+	return OnDisconnected(ErrCode)
+//-->
+</script>
+
+<script language="javascript" event="OnMenuItemSelected(ItemID)" for="OSpiceX1">
+<!--
+	return OnMenuItemSelected(ItemID)
+//-->
+</script>
+
+
+</HEAD>
+<BODY>
+
+<body onLoad="OnPageLoad()">
+
+Current HostIp
+<input id="HostIp1" type="text" size="13"> </input>
+<INPUT id="SetHostIp1" type="button" value="SetHostIp" name="SetHostIp1" language=javascript 
+onclick="return SetHostIp1()">
+Current HostPort
+<input id="HostPort1" type="text" size="3"> </input>
+<INPUT id="SetHostPort1" type="button" value="SetHostPort" name="SetHostPort1" language=javascript 
+onclick="return SetHostPort1()">
+    &nbsp;SecurePort
+    <input id="SecurePort" type="text" size="3"></INPUT>
+    <INPUT id="SecurePort1" type="button" value="Set Secure Port" name="SecurePort1" language=javascript 
+onclick="return SetSecurePort1()">
+    <br />
+ColorDepth
+<input id="ColorDepth1" type="text" size="3"> </input>
+<INPUT id="SetColorDepth1" type="button" value="SetColorDepth" name="SetColorDepth1" language=javascript 
+onclick="return SetColorDepth1()">
+DisableEffects
+<input id="DisableEffects1" type="text" size="13"> </input>
+<INPUT id="SetDisableEffects1" type="button" value="SetDisableEffects" name="SetDisableEffects1" language=javascript 
+onclick="return SetDisableEffects1()">
+<br />
+Current Password
+<input id="Password1" type="text" size="3"></input>
+<INPUT id="SetPassword1" type="button" value="SetPassword" name="SetPassword1" language=javascript 
+onclick="return SetPassword1()">
+    &nbsp;&nbsp;
+    CipherSuite
+    <input id="CipherSuite1" type="text" size="13">
+    <INPUT id="SetCipherSuite1" type="button" value="Set Cipher Suite" name="Set Cipher suite" language=javascript 
+onclick="return SetCipherSuite1()"><br />
+    Choose which channels to encrypt:
+    <input id="EncryptedChannels1" type="text" style="width: 476px">
+    <INPUT id="SetSSLChannels1" type="button" value="Set Encrypted Channels" name="Set Encrypted Channels" language=javascript 
+onclick="return SetEncryptedChannels1()" style="width: 150px"><br />
+<br />
+    Number of monitors
+    <input id="NumberOfMonitors1" type="text" size="13">
+    <INPUT id="SetNumberOfMonitors1" type="button" value="Set number of monitors" name="Set number of monitors" language=javascript 
+onclick="return SetNumberOfMonitors1()"><br />
+<br />
+<p>
+<input id="NoUsb" type="checkbox" checked onclick="document.getElementById('UsbListenPort').disabled = !document.getElementById('UsbListenPort').disabled">Enable USB
+USB Listen Port <input id="UsbListenPort" type="text" size="5" maxlegnth="5" value="32032">
+</p>
+<INPUT id="Button13" type="button" value="copy libcelt" name="OSpiceLibcelt" language=javascript 
+onclick="return SP1_CopyLibcelt()">
+<INPUT id="Button11" type="button" value="SP1_Connect" name="OSpiceX1Connect" language=javascript 
+onclick="return SP1_Connect()">
+<INPUT id="Button12" type="button" value="SP1_Disconnect" name="OSpiceX1Disconnect" language=javascript 
+onclick="return SP1_Disconnect()">
+    <input id="Checkbox1" type="checkbox"  /><label for="Checkbox1">Full screen</label><br />
+
+<OBJECT codebase="http://192.168.2.85:80/webclient/spice/SpiceX.CAB#version=1,0,0,1" ID="OSpiceX1" CLASSID="CLSID:ACD6D89C-938D-49B4-8E81-DDBD13F4B48A">
+<PARAM NAME="Port" VALUE= "5900">
+<PARAM NAME="SecurePort" VALUE= "5902">
+<PARAM NAME="HostIP" VALUE="192.168.0.205">
+<PARAM NAME="Title" VALUE="Hello Spice">
+<PARAM NAME="Password" VALUE="">
+<PARAM name="CipherSuite" VALUE="" >
+</OBJECT>
+<INPUT id="Button13" type="button" value="SP1_Show" name="OSpiceX1Show" language=javascript 
+onclick="return SP1_Show()">
+<INPUT id="Button14" type="button" value="SP1_Hide" name="OSpiceX1Hide" language=javascript 
+onclick="return SP1_Hide()">
+<INPUT id="SetTitle1" type="button" value="SetTitle1" name="SetTitle1" language=javascript 
+onclick="return SetTitle1()">
+<input id="Title1" type="text" size="1024" value="Hello Spice"> </input>
+<INPUT id="GetTitle1" type="button" value="GetTitle1" name="GetTitle1" language=javascript 
+onclick="return GetTitle1()">
+
+<br>
+Menu resource: <input id="MenuRes" type="text" size="100"> </input><br>
+<INPUT id="CreateMenu" type="button" value="CreateMenu" name="CreateMenu" language=javascript 
+onclick="return CreateMenu()">
+<INPUT id="DeleteMenu" type="button" value="DeleteMenu" name="DeleteMenu" language=javascript 
+onclick="return DeleteMenu()">
+
+
+<br />----------------------------------------------------------------------------------------------<br />
+Current HostIp
+<input id="HostIp2" type="text" size="13"> </input>
+<INPUT id="SetHostIp2" type="button" value="SetHostIp" name="SetHostIp2" language=javascript 
+onclick="return SetHostIp2()">
+Current HostPort
+<input id="HostPort2" type="text" size="3"> </input>
+<INPUT id="SetHostPort2" type="button" value="SetHostPort" name="SetHostPort2" language=javascript 
+onclick="return SetHostPort2()">
+Current Password
+<input id="Password2" type="text" size="3"></input>
+<INPUT id="SetPassword2" type="button" value="SetPassword" name="SetPassword2" language=javascript 
+onclick="return SetPassword2()">
+    <br />
+    CipherSuite
+    <input id="CipherSuite2" type="text" size="13">
+    <INPUT id="SetCipherSuite2" type="button" value="Set Cipher Suite" name="Set Cipher suite" language=javascript 
+onclick="return SetCipherSuite2()"><br />
+<br />
+
+<INPUT id="Button21" type="button" value="SP2_Connect" name="OSpiceX2Connect" language=javascript 
+onclick="return SP2_Connect()">
+<INPUT id="Button22" type="button" value="SP2_Disconnect" name="OSpiceX2Disconnect" language=javascript 
+onclick="return SP2_Disconnect()">
+<br />
+<OBJECT ID="OSpiceX2" CLASSID="CLSID:ACD6D89C-938D-49B4-8E81-DDBD13F4B48A"></OBJECT>
+</BODY>
+<INPUT id="Button23" type="button" value="SP2_Show" name="OSpiceX2Show" language=javascript 
+onclick="return SP2_Show()">
+<INPUT id="Button24" type="button" value="SP2_Hide" name="OSpiceX2Hide" language=javascript 
+onclick="return SP2_Hide()">
+<INPUT id="SetTitle2" type="button" value="SetTitle2" name="SetTitle2" language=javascript 
+onclick="return SetTitle2()">
+<input id="Title2" type="text" size="20"> </input>
+
+<br />
+<br />
+<br />
+Audio:
+<br />
+Current GuestIp
+<input id="AudioGuestIp1" type="text"> </input>
+<INPUT id="SetAudioGuestIp1" type="button" value="SetAudioGuestIp" name="SetAudioGuestIp1" language=javascript 
+onclick="return SetAudioGuestIp1()">
+<br />
+Current GuestPort
+<input id="AudioGuestPort1" type="text" size="13"> </input>
+<INPUT id="SetAudioGuestPort1" type="button" value="SetAudioGuestPort" name="SetAudioGuestPort1" language=javascript 
+onclick="return SetAudioGuestPort1()">
+<br />
+<INPUT id="Button100" type="button" value="SP1_AudioConnect" name="OSpiceX1AudioConnect" language=javascript 
+onclick="return SP1_AudioConnect()">
+<INPUT id="Button101" type="button" value="SP1_AudioDisconnect" name="OSpiceX1AudioDisconnect" language=javascript 
+onclick="return SP1_AudioDisconnect()">
+
+<INPUT id="Button102" type="button" value="SP1_SpiceTitle" name="OSpiceX1SetTitle" language=javascript 
+onclick="return SP1_Title()">
+
+</HTML>
