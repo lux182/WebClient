@@ -49,14 +49,14 @@ const L_ServerDeniedConnection_ErrorMessage ="The client could not establish a c
 const L_ControlLoadFailed_ErrorMessage= "Remote Desktop Web Connection ActiveX control could not be installed. A connection cannot be made without a working installed version of the control. Please contact the server administrator."
 const L_InvalidServerName_ErrorMessage = "An invalid server name was specified."
 
-sub window_onload()
-   if not LCase(Navigator.CpuClass) = "x86" then
-      msgbox L_PlatformCheck_ErrorMessage
-   end if
-   if not autoConnect() then
-       Document.all.editServer.Focus
-   end if
-end sub
+'sub window_onload()
+ '  if not LCase(Navigator.CpuClass) = "x86" then
+  '    msgbox L_PlatformCheck_ErrorMessage
+   'end if
+   'if not autoConnect() then
+        'Document.all.editServer.Focus
+    'end if
+'end sub
 
 function autoConnect()
 	Dim sServer
@@ -225,7 +225,7 @@ end sub
 
  
 sub ReturnToConnectPage()
-   Window.Navigate("Default.htm")
+   Window.Navigate("desktops.html")
 end sub
 
 sub MsRdpClient_OnConnected()

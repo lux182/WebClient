@@ -1,7 +1,7 @@
     <!DOCTYPE html>
     <html>
     <head>
-    <meta charset="UTF-8">
+    <meta  charset="UTF-8">
     <title>Saiway Web Client - Desktops</title>
     <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="themes/icon.css">
@@ -10,12 +10,12 @@
     <script type="text/vbscript" src="js/rdpvbs.vbs"></script>
     <link href="images/logo.ico" rel="shortcut icon" />
     </head>
-    <body class="easyui-layout">
+    <body class="easyui-layout"  >
     <div region="north" border="false" class="rtitle">
 		Saiway Web Client
 		<div class="pull-right">
 		    <table>
-		        <tr><td><label id="loginUser" style="margin-right:20px">当前登录用户：</label></td>
+		        <tr><td><label id="loginUser" style="margin-right:20px ">当前登录用户：</label></td>
 		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="loginOut()">安全退出</a></td>
 		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" onclick="setFunc()">设置</a></td>
 		        <td><a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-help'" onclick="getHelp()">帮助</a></td>
@@ -24,7 +24,7 @@
         </div>
 	</div>
 	
-	<div region="center" border="false"  >
+	<div region="center" border="false"> 
 		 <div class="easyui-layout" fit="true">
 		     <div data-options="region:'center'" style="padding-left:20%;padding-right:20% ;padding-top:30px;padding-bottom:30px">
 		        
@@ -38,10 +38,10 @@
      <div style="margin:0 auto;text-align:center;">Copyright © 2014 上海赛为信息技术有限公司版权所有 沪ICP备14013704号</div>
     </div>  
     <div id="tb">
-        <a href="#" class="easyui-linkbutton pull-right" iconCls="icon-reload" plain="true" onclick="javascript:$('#tt').datagrid('reload')">刷新</a>
+        <a href="#" class="easyui-linkbutton pull-right" iconCls="icon-reload" plain="true" onclick="javascript:$('#tt').datagrid('load',loadData())">刷新</a>
     </div>
     
-    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px;display: none"
         closed="true" buttons="#dlg-buttons">
         <div class="ftitle">桌面名称</div>
         <form id="fm" method="post" ajax="true" novalidate="true">
@@ -173,6 +173,7 @@
         <div id="p_open" class="easyui-progressbar" text=""  style="width:300px; "></div>
     </div>
     
+      
     <input type="text" name="Server" hidden="true" size="41" id="editServer">
     <select size="1" name="comboResolution" hidden="true" id=comboRes  >
         <option selected value="1"><ID id=option1>Full-screen</ID></option>
@@ -213,9 +214,15 @@
             </table>
         </center>
     </div>
-    
-    <div closed="true"
-    <OBJECT codebase="http://192.168.2.85:80/webclient/spice/SpiceX.CAB#version=1,0,0,1" ID="OSpiceX1" CLASSID="CLSID:ACD6D89C-938D-49B4-8E81-DDBD13F4B48A">
+   
+    <div style="display: none" >
+    <OBJECT codebase="http://192.168.2.85:80/webclient/SpiceX.CAB#version=1,0,0,1" ID="OSpiceX1" CLASSID="CLSID:ACD6D89C-938D-49B4-8E81-DDBD13F4B48A">
+        <PARAM NAME="Port" VALUE= "">
+        <PARAM NAME="SecurePort" VALUE= "">
+        <PARAM NAME="HostIP" VALUE="">
+        <PARAM NAME="Title" VALUE="">
+        <PARAM NAME="Password" VALUE="">
+        <PARAM name="CipherSuite" VALUE="" >
     </OBJECT>
     </div>
     <input id="HostIp1" type="text" hidden="true" size="13"> </input>
@@ -223,37 +230,38 @@
     <input id="SecurePort" type="text" hidden="true" size="3"></INPUT>
     <input id="Password1" type="text" hidden="true" size="3"></input>
     <input id="CipherSuite1" type="text" hidden="true" size="13"></input>
-    
+   
 	<script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="js/custom.js"></script>
     <script type="text/javascript" src="js/spice.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+    
     <script type="text/javascript">
     $(document).ready(function(e) {
+       $('#tabs').tabs({
+            onSelect:function(title){
+                    var tit = $('.tabs-selected').text();
+                    if(tit=='桌面设置')
+                    {
+                            var data=$('#tt').datagrid('getData');
+                            if(data.total==0)
+                            {
 
-   $('#tabs').tabs({
-        onSelect:function(title){
-                var tit = $('.tabs-selected').text();
-                if(tit=='桌面设置')
-                {
-                        var data=$('#tt').datagrid('getData');
-                        if(data.total==0)
-                        {
-
-                                $('#setbtn').linkbutton('disable');
-                        }
-                        else
-                        {
-                                $('#setbtn').linkbutton('enable');
-                        }
-                }
-                else
-                {
-                        $('#setbtn').linkbutton('enable');
-                }
-        }
-  });
- });
+                                    $('#setbtn').linkbutton('disable');
+                            }
+                            else
+                            {
+                                    $('#setbtn').linkbutton('enable');
+                            }
+                    }
+                    else
+                    {
+                            $('#setbtn').linkbutton('enable');
+                    }
+            }
+      });
+    });
+ 
     /*$.cookie('userId', '001');  
     $.cookie('tenantId', 'A0HF019283HHGGS9SD');  
     $.cookie('tokenId', 'JDJH98328JHHSFG7JJHDHGH76');  
@@ -269,9 +277,13 @@
     $.ajaxSetup({
         beforeSend:function(xhr){
             //xhr.setRequestHeader('Access-Control-Allow-Origin:*');
-            xhr.setRequestHeader('X-Auth-Token',token_id);       
+            xhr.setRequestHeader('X-Auth-Token',token_id);
         },
-        headers:{'Mode':'WEB'}
+        headers:{
+	        Accept:"application/json",
+	        'Mode':'WEB'
+	    }
+        
     });
    
     $('#loginUser').append(user_name);
@@ -279,6 +291,7 @@
     $('#dg').datagrid({
        
     });
+    
     $('#tt').datagrid({
          columns:[[
             {field:'id',hidden:true,title:'ID'},
@@ -295,26 +308,31 @@
             {field:'memery',hidden:true},
             {field:'usbRedirect',hidden:true}
         ]],
-        loader:function(param,success,error){
-            $.ajax({
-                url:preUrl+'/users/'+user_id+'/desktops',
-                type:'GET',
-                contentType:'text/json',
-                success:function(data,textStatus,jqXHR){ 
-                    var data = eval(data);
-                    success(data.desktops);
-                },
-                error:function(jqXHR){
-                    $.messager.show({
-                        title: 'Error',
-                        msg: "查询桌面列表错误"
-                    });
-                } 
-            });
-        }
-        
+        url:loadData()
     });
-  
+    function loadData (){
+    $.ajax({
+        url:preUrl+'/users/'+user_id+'/desktops',
+        type:'GET',
+        success:function(data,textStatus,jqXHR){ 
+            var data = eval(data);
+            if(data!=null){
+                $('#tt').datagrid('loadData', data.desktops);
+            }else{
+                $.messager.show({
+                    title: 'Info',
+                    msg: "桌面列表为空"
+                });
+            }
+        },
+        error:function(jqXHR){
+            $.messager.show({
+                title: 'Error',
+                msg: "查询桌面列表错误"
+            });
+        } 
+    });
+  }
   function statusFormater(value,row,index){
 		if (row.running==1){
 			return "运行";
@@ -593,7 +611,7 @@
                             title: 'Warning',
                             msg: "桌面已关闭"
                         });
-                        $('#tt').datagrid('reload');
+                        $('#tt').datagrid('load',loadData());
                     }else{
                         $('#dlg_stop').dialog({
                             modal:true
@@ -614,7 +632,7 @@
                                 type:'POST',
                                 success: function(result){
                                     $('#dlg_stop').dialog('close'); // close the dialog
-                                    $('#tt').datagrid('reload'); // reload the user data
+                                    $('#tt').datagrid('load',loadData()); // reload the user data
                                 },
                                 error:function(jqXHR){
                                     $.messager.alert(
@@ -645,6 +663,7 @@
                 modal:true
             });
             $('#dlg').dialog('open').dialog('setTitle','修改桌面名称');
+            $("#dlg").css("display","block");
             $('#fm').form('load',row);
             //url = 'update_user.php?id='+row.id;
             url = preUrl+'/desktops/'+row.id+'/changename'
@@ -795,7 +814,7 @@
                     });
                 } else {
                     $('#dlg').dialog('close'); // close the dialog
-                    $('#tt').datagrid('reload'); // reload the user data
+                    $('#tt').datagrid('load',loadData()); // reload the user data
                 }
             },
             error:function(jqXHR){
@@ -835,19 +854,11 @@
             data:{"":""},
             //contentType:'text/plain',
             success:function(result){
-                var result = eval(result);
-                if (result.errorMsg){
-                    $.messager.show({
-                        title: 'Error',
-                        msg: result.errorMsg
-                    });
-                } else {
-                    $.cookie('userId', '', { expires: -1 }); 
-                    $.cookie('tenantId', '', { expires: -1 }); 
-                    $.cookie('tokenId', '', { expires: -1 }); 
-                    $('#dlg_loginout').dialog('close'); // close the dialog
-                    window.location.href='index.html'
-                }
+                $.cookie('userId', '', { expires: -1 }); 
+                $.cookie('tenantId', '', { expires: -1 }); 
+                $.cookie('tokenId', '', { expires: -1 }); 
+                $('#dlg_loginout').dialog('close'); // close the dialog
+                window.location.href='index.html'
             },
             error:function(){
                 $.messager.show({

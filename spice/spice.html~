@@ -132,7 +132,7 @@ function SP1_Connect()
     try
     {    
     OSpiceX1.FullScreen = document.all["Checkbox1"].checked;
-
+alert(OSpiceX1.FullScreen);
     if (document.getElementById('NoUsb').checked) {
         OSpiceX1.UsbListenPort = document.getElementById('UsbListenPort').value;
     } else {
@@ -374,9 +374,9 @@ onclick="return SP1_Disconnect()">
     <input id="Checkbox1" type="checkbox"  /><label for="Checkbox1">Full screen</label><br />
 
 <OBJECT codebase="http://192.168.2.85:80/webclient/spice/SpiceX.CAB#version=1,0,0,1" ID="OSpiceX1" CLASSID="CLSID:ACD6D89C-938D-49B4-8E81-DDBD13F4B48A">
-<PARAM NAME="Port" VALUE= "5900">
+<PARAM NAME="Port" VALUE= "5901">
 <PARAM NAME="SecurePort" VALUE= "5902">
-<PARAM NAME="HostIP" VALUE="192.168.0.205">
+<PARAM NAME="HostIP" VALUE="192.168.0.121">
 <PARAM NAME="Title" VALUE="Hello Spice">
 <PARAM NAME="Password" VALUE="">
 <PARAM name="CipherSuite" VALUE="" >

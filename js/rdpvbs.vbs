@@ -50,12 +50,12 @@ const L_ControlLoadFailed_ErrorMessage= "Remote Desktop Web Connection ActiveX c
 const L_InvalidServerName_ErrorMessage = "An invalid server name was specified."
 
 sub window_onload()
-   if not LCase(Navigator.CpuClass) = "x86" then
+ if not LCase(Navigator.CpuClass) = "x86" then
       msgbox L_PlatformCheck_ErrorMessage
    end if
    if not autoConnect() then
-       Document.all.editServer.Focus
-   end if
+        Document.all.editServer.Focus
+    end if
 end sub
 
 function autoConnect()

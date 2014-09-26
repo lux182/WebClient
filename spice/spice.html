@@ -132,7 +132,6 @@ function SP1_Connect()
     try
     {    
     OSpiceX1.FullScreen = document.all["Checkbox1"].checked;
-
     if (document.getElementById('NoUsb').checked) {
         OSpiceX1.UsbListenPort = document.getElementById('UsbListenPort').value;
     } else {

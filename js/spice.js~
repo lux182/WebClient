@@ -149,7 +149,7 @@ function SP1_Disconnect()
     }
     catch(e)
     {
-    alert(translate_errnum(e.number));
+    //alert(translate_errnum(e.number));
     }
 }
 
@@ -297,8 +297,8 @@ function ConnectForWebClient()
     {
         OSpiceX1.HostIP = document.all["HostIp1"].value; //set property    
         OSpiceX1.Port = document.all["HostPort1"].value; //set property    
-        OSpiceX1.FullScreen = true;
-        OSpiceX1.UsbListenPort = 0;
+        OSpiceX1.FullScreen = "false";
+        OSpiceX1.UsbListenPort = 32032;
         OSpiceX1.Connect();
     }catch(e)
     {

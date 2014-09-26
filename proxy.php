@@ -320,7 +320,7 @@ class AjaxProxy
         if($this->_rawHeaders !== NULL) return;
         
         $this->_rawHeaders = getallheaders();
-
+ 
         if($this->_rawHeaders === FALSE)
             throw new Exception("Could not get request headers");
     }
@@ -382,14 +382,14 @@ class AjaxProxy
             curl_setopt($curl_handle, CURLOPT_POST, true);
             curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $this->_requestBody);
         }
-    
         curl_setopt($curl_handle, CURLOPT_HEADER, true);
         curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->_requestUserAgent);
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl_handle, CURLOPT_COOKIE, $this->_buildProxyRequestCookieString());
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $this->_generateProxyRequestHeaders());
-        //curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $this->_rawHeaders());
+        //curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $this->_generateProxyRequestHeaders());
+        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $this->_generateRequestHeaders());
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+         
         return curl_exec($curl_handle);
     }
 
@@ -557,7 +557,7 @@ class AjaxProxy
      */
     protected function _generateProxyRequestHeaders($as_string = FALSE)
     {
-        $headers                 = array();
+        $headers = array();
         $headers['Content-Type'] = $this->_requestContentType;
         
         if($as_string)
@@ -572,7 +572,16 @@ class AjaxProxy
 
         return $headers;
     }
-
+    
+    protected function _generateRequestHeaders()
+    {
+    $header = array();
+    foreach(getallheaders() as $key => $value) { 
+        $header[] = $key . ':' . $value;
+    }
+    //print_r($header);
+    return $header;
+    }
     /**
      * From the global $_COOKIE array, rebuild the cookie string for the proxy
      *  request
